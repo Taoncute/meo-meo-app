@@ -3,14 +3,8 @@ name: Build Android APK
 on:
   push:
     branches: [main, master]
-    paths:
-      - 'meo-meo-app/**'
-      - '.github/workflows/build-android.yml'
   pull_request:
     branches: [main, master]
-    paths:
-      - 'meo-meo-app/**'
-      - '.github/workflows/build-android.yml'
   workflow_dispatch:
 
 jobs:
@@ -29,7 +23,6 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd meo-meo-app
           npm install
 
       - name: Install build tools
@@ -47,8 +40,7 @@ jobs:
 
       - name: Build Android APK
         run: |
-          cd meo-meo-app
-          npx cap init meo-meo-app com.nousresearch.meo-meo-app
+          npx cap init meo-meo-app com.meomeo.app
           npx cap add android
           npx cap sync android
           cd android
@@ -58,6 +50,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: meo-meo-app-android-apk
-          path: meo-meo-app/android/app/build/outputs/apk/debug/app-debug.apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
           if-no-files-found: error
