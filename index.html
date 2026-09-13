@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meo Meo - AI Agent</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <div class="logo-container">
+        <img src="icon-512.png" alt="Meo Meo" class="logo">
+        <h1>Meo Meo</h1>
+      </div>
+      <div class="status-bar">
+        <span class="status-dot"></span>
+        <span id="status-text">Ready</span>
+      </div>
+    </header>
+
+    <main class="chat-container">
+      <div id="messages" class="messages"></div>
+    </main>
+
+    <footer class="footer">
+      <div class="input-area">
+        <textarea id="message-input" placeholder="Type your message..." rows="1"></textarea>
+        <button id="send-button" class="btn-primary">Send</button>
+      </div>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

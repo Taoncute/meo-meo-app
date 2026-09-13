@@ -1,0 +1,54 @@
+{
+  "name": "meo-meo-app",
+  "version": "1.0.0",
+  "description": "Meo Meo - Personal AI Agent Desktop Application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "package": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "keywords": [
+    "ai",
+    "agent",
+    "hermes",
+    "meo-meo"
+  ],
+  "author": "Meo Meo",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^32.0.0",
+    "electron-builder": "^25.1.0"
+  },
+  "build": {
+    "appId": "com.meomeo.app",
+    "productName": "Meo Meo",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "style.css",
+      "app.js"
+    ],
+    "extraResources": [
+      {
+        "from": "icon-512.png",
+        "to": "icon-512.png"
+      }
+    ],
+    "osx": {
+      "icon": "icon-512.png"
+    },
+    "win": {
+      "icon": "icon-512.png"
+    },
+    "linux": {
+      "icon": "icon-512.png"
+    }
+  }
+}
