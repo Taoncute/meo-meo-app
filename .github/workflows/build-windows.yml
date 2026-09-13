@@ -1,0 +1,49 @@
+name: Build Windows Installer
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'meo-meo-app/**'
+      - '.github/workflows/build-windows.yml'
+  pull_request:
+    branches: [main, master]
+    paths:
+      - 'meo-meo-app/**'
+      - '.github/workflows/build-windows.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          cd meo-meo-app
+          npm install -g serve
+          npm install
+
+      - name: Build Windows Installer
+        run: |
+          cd meo-meo-app
+          npx electron-builder --win portable nsis
+
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: meo-meo-app-windows
+          path: |
+            meo-meo-app/dist/*.exe
+            meo-meo-app/dist/*.zip
+          retention-days: 30
+          if-no-files-found: error
