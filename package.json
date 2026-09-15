@@ -41,7 +41,7 @@
         "to": "icon-512.png"
       }
     ],
-    "osx": {
+    "mac": {
       "icon": "icon-512.png"
     },
     "win": {
