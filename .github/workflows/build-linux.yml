@@ -30,7 +30,7 @@ jobs:
           sudo apt-get install -y squashfs-tools libfuse2
 
       - name: Build Linux AppImage
-        run: npx electron-builder --linux AppImage
+        run: npx electron-builder --linux AppImage --publish never
 
       - name: Upload Linux artifacts
         uses: actions/upload-artifact@v4
