@@ -32,8 +32,10 @@ jobs:
 
       - name: Install SDK components
         run: |
-          yes | sdkmanager --licenses || true
-          sdkmanager "platforms;android-33" "build-tools;33.0.0"
+          SDKMANAGER=$(find $ANDROID_HOME -name "sdkmanager" -type f | head -1)
+          echo "Using sdkmanager at: $SDKMANAGER"
+          yes | $SDKMANAGER --licenses || true
+          $SDKMANAGER "platforms;android-33" "build-tools;33.0.0"
 
       - name: Build Android APK
         run: |
