@@ -39,7 +39,7 @@ jobs:
 
       - name: Build Android APK
         run: |
-          npx cap init meo-meo-app com.meomeo.app
+          npx cap init meo-meo-app com.meomeo.app --web-dir .
           npx cap add android
           npx cap sync android
           cd android
