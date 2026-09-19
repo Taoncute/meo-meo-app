@@ -28,7 +28,7 @@ jobs:
       - name: Install build tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y openjdk-17-jdk zip
+          sudo apt-get install -y openjdk-21-jdk zip
 
       - name: Install SDK components
         run: |
