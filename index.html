@@ -1,36 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Meo Meo - AI Agent</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div id="app">
-    <header class="header">
-      <div class="logo-container">
-        <img src="icon-512.png" alt="Meo Meo" class="logo">
-        <h1>Meo Meo</h1>
-      </div>
-      <div class="status-bar">
-        <span class="status-dot"></span>
-        <span id="status-text">Ready</span>
-      </div>
-    </header>
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <!-- marked.js for Markdown rendering of AI responses -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <title>Meo Meo</title>
+  </head>
+  <body>
+    <div class="chat-container">
+      <!-- Header -->
+      <header class="chat-header">
+        <div class="header-title">
+          <img
+            class="header-logo"
+            src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCI+PGNpcmNsZSBjeD0iMjQiIGN5PSIyNPCIIGNuPSIzMiIgZmlsbD0iI2RkNWEyMyIvPjxjaXJjbGUgY3g9IjIyIiBjeT0iMjIiIGNuPSIxMCIgZmlsbD0iIzFhMTIxYSIvPjxjaXJjbGUgY3g9IjI2IiBjeT0iMjIiIGNuPSI0IiBmaWxsPSIjMWE2MTJhIi8+PC9zdmc+"
+            alt="Meo Meo"
+            width="24"
+            height="24"
+            aria-hidden="true"
+          />
+          <span class="app-name">Meo Meo</span>
+        </div>
+        <div class="header-status" id="status-text">Đang kết nối…</div>
+      </header>
 
-    <main class="chat-container">
-      <div id="messages" class="messages"></div>
-    </main>
+      <!-- Chat messages -->
+      <main class="chat-messages" id="messages"></main>
 
-    <footer class="footer">
-      <div class="input-area">
-        <textarea id="message-input" placeholder="Type your message..." rows="1"></textarea>
-        <button id="send-button" class="btn-primary">Send</button>
-      </div>
-    </footer>
-  </div>
+      <!-- Composer -->
+      <footer class="composer-wrap">
+        <form class="composer-form" autocomplete="off" id="composer-form">
+          <textarea
+            id="message-input"
+            class="composer-input"
+            placeholder="Nhập tin nhắn…"
+            autocomplete="off"
+            rows="1"
+            aria-label="Nhập tin nhắn"
+          ></textarea>
+          <button
+            id="send-button"
+            type="submit"
+            class="send-btn"
+            aria-label="Gửi"
+            disabled
+          >
+            <span class="send-icon" aria-hidden="true">→</span>
+          </button>
+        </form>
+      </footer>
+    </div>
 
-  <script src="app.js"></script>
-</body>
+    <script src="app.js" defer></script>
+  </body>
 </html>
