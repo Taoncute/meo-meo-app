@@ -2,7 +2,10 @@
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <meta name="color-scheme" content="dark" />
     <!-- marked.js for Markdown rendering of AI responses -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -10,14 +13,17 @@
     <title>Meo Meo</title>
   </head>
   <body>
-    <div class="chat-container">
+    <!-- Single root. app.js guards double-init via __MEO_MEO_APP_INITIALIZED so
+         a cached/double-loaded bundle cannot spawn two ChatApp instances
+         (the double-overlay bug on the APK). -->
+    <div class="chat-container" id="app-root">
       <!-- Header -->
       <header class="chat-header">
         <div class="header-title">
           <img
             class="header-logo"
-            src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCI+PGNpcmNsZSBjeD0iMjQiIGN5PSIyNPCIIGNuPSIzMiIgZmlsbD0iI2RkNWEyMyIvPjxjaXJjbGUgY3g9IjIyIiBjeT0iMjIiIGNuPSIxMCIgZmlsbD0iIzFhMTIxYSIvPjxjaXJjbGUgY3g9IjI2IiBjeT0iMjIiIGNuPSI0IiBmaWxsPSIjMWE2MTJhIi8+PC9zdmc+"
-            alt="Meo Meo"
+            src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCI+PGNpcmNsZSBjeD0iMjQiIGN5PSIyNCIgcmlzPSIzMiIgZmlsbD0iI2RkNWEyMyIvPjxjaXJjbGUgY3g9IjIyIiBjeT0iMjIiIHI9IjEwIiBmaWxsPSIjMWE2MTJhIi8+PGNpcmNsZSBjeD0iMjYiIGN5PSIyMiIgcmlzPSI0IiBmaWxsPSIjMWE2MTJhIi8+PC9zdmc+"
+            alt="Meo Meo logo"
             width="24"
             height="24"
             aria-hidden="true"
@@ -30,14 +36,22 @@
       <!-- Chat messages -->
       <main class="chat-messages" id="messages"></main>
 
-      <!-- Composer -->
+      <!-- Composer (fixed bottom) -->
       <footer class="composer-wrap">
-        <form class="composer-form" autocomplete="off" id="composer-form">
+        <form
+          class="composer-form"
+          id="composer-form"
+          autocomplete="off"
+          autocapitalize="off"
+          autocorrect="off"
+        >
           <textarea
             id="message-input"
             class="composer-input"
             placeholder="Nhập tin nhắn…"
             autocomplete="off"
+            autocapitalize="off"
+            autocorrect="off"
             rows="1"
             aria-label="Nhập tin nhắn"
           ></textarea>

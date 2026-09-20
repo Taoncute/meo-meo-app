@@ -32,7 +32,7 @@ body {
   flex-direction: column;
   width: 100%;
   max-width: 720px;
-  height: 100vh;
+  height: 100dvh;
   margin: 0 auto;
   box-shadow: var(--shadow);
   background: var(--bg);
@@ -55,6 +55,12 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--text-primary);
+}
+
+.app-name {
   font-weight: 600;
   font-size: 17px;
   color: var(--text-primary);
@@ -117,12 +123,26 @@ body {
   border-bottom-left-radius: 5px;
 }
 
-/* AI avatar (small) */
+/* AI avatar (small) — positioned with a safe negative margin rather than
+   left offset so it can never escape the viewport width on small screens. */
+.message.ai {
+  align-self: flex-start;
+  background: var(--ai-bubble);
+  color: var(--ai-bubble-text);
+  border-bottom-left-radius: 5px;
+  position: relative;
+  padding-left: 14px;
+}
+
+.message.ai .content {
+  margin-left: -14px;
+}
+
 .message.ai::before {
   content: "";
   position: absolute;
-  left: -30px;
-  top: 2px;
+  left: -32px;
+  top: 11px;
   width: 24px;
   height: 24px;
   min-width: 24px;
@@ -134,6 +154,45 @@ body {
   font-size: 13px;
   color: #fff;
   font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Keep the avatar pinned; hide it on very narrow screens to avoid overflow. */
+@media (max-width: 340px) {
+  .message.ai {
+    padding-left: 12px;
+  }
+  .message.ai .content {
+    margin-left: -12px;
+  }
+  .message.ai::before {
+    left: -28px;
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    font-size: 11px;
+  }
+}
+
+/* ===== Loading dots (3 bouncing dots) ===== */
+.loading-dots {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+}
+.loading-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-secondary);
+  display: inline-block;
+  animation: bounce 0.85s ease-in-out 0s both infinite;
+}
+.loading-dot:nth-child(2) { animation-delay: 0.12s; }
+.loading-dot:nth-child(3) { animation-delay: 0.24s; }
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0.8); opacity: 0.45; }
+  40% { transform: scale(1); opacity: 1; }
 }
 
 /* ===== Markdown content (AI) ===== */
@@ -281,27 +340,6 @@ body {
 
 .send-icon {
   display: block;
-}
-
-/* ===== Loading dots (3 bouncing dots) ===== */
-.loading-dots {
-  display: inline-flex;
-  gap: 5px;
-  align-items: center;
-}
-.loading-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--text-secondary);
-  display: inline-block;
-  animation: bounce 0.85s ease-in-out 0s both infinite;
-}
-.loading-dot:nth-child(2) { animation-delay: 0.12s; }
-.loading-dot:nth-child(3) { animation-delay: 0.24s; }
-@keyframes bounce {
-  0%, 80%, 100% { transform: scale(0.8); opacity: 0.45; }
-  40% { transform: scale(1); opacity: 1; }
 }
 
 /* ===== Responsive mobile-first ===== */
