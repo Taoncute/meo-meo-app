@@ -18,17 +18,32 @@ class ChatApp {
     this.statusText = document.getElementById('status-text');
   }
 
-  initWebSocket() {
-    // Kết nối WebSocket đến backend Hermes
-    const wsUrl = 'ws://localhost:9119/api/ws';
+  async initWebSocket() {
+    // Lấy session token động từ dashboard (inject vào index.html).
+    // Token thay đổi mỗi lần khởi động, nên không thể hardcode.
+    let sessionToken = null;
+    try {
+      const resp = await fetch('http://localhost:9119/');
+      if (resp.ok) {
+        const html = await resp.text();
+        const m = html.match(/window.__HERMES_SESSION_TOKEN__="([^"]+)"/);
+        sessionToken = m ? m[1] : null;
+      }
+    } catch (e) {
+      console.error('Failed to fetch session token:', e);
+    }
+
+    // /api/pty là endpoint WS thực sự cho Chat tab (PTY-over-WebSocket /
+    // terminal emulator). /api/ws chỉ là JSON-RPC sidecar dành cho metadata.
+    const wsUrl = `ws://localhost:9119/api/pty?token=${encodeURIComponent(sessionToken || '')}`;
     this.ws = new WebSocket(wsUrl);
-    
+  
     this.ws.onopen = () => {
       console.log('WebSocket connected');
       this.setStatus('Connected');
       this.createSession();
     };
-
+  
     this.ws.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
@@ -37,14 +52,14 @@ class ChatApp {
         console.error('Failed to parse message:', e);
       }
     };
-
+  
     this.ws.onclose = () => {
       console.log('WebSocket closed');
       this.setStatus('Disconnected');
       // Retry connection after 3 seconds
       setTimeout(() => this.initWebSocket(), 3000);
     };
-
+  
     this.ws.onerror = (error) => {
       console.error('WebSocket error:', error);
       this.setStatus('Error');
@@ -58,12 +73,12 @@ class ChatApp {
       this.setStatus('Ready');
       return;
     }
-
+  
     // Xử lý response
     if (data.result) {
       this.handleResponse(data.id, data.result);
     }
-
+  
     // Xử lý event streaming
     if (data.method === 'event' && data.params) {
       this.handleStreamingEvent(data.params);
@@ -73,16 +88,16 @@ class ChatApp {
   handleResponse(reqId, result) {
     const pending = this.pendingMessageId;
     if (!pending) return;
-
+  
     // Xóa trạng thái đang xử lý
     this.setProcessing(false);
-
+  
     // Xử lý kết quả từ prompt.submit
     if (result?.turn) {
       // Kết quả từ prompt.submit - không có message để hiển thị
       return;
     }
-
+  
     // Xử lý message.complete (kết thúc streaming)
     if (result?.type === 'message.complete') {
       this.appendMessage('ai', result.content || '', pending);
@@ -92,9 +107,9 @@ class ChatApp {
 
   handleStreamingEvent(params) {
     if (!params) return;
-
+  
     const { type, delta, content } = params;
-
+  
     if (type === 'message.delta' && delta) {
       // Streaming tin nhắn từ AI
       this.appendMessage('ai', delta, this.pendingMessageId, true);
@@ -116,12 +131,12 @@ class ChatApp {
 
   async submitPrompt(text) {
     if (!this.sessionId || this.isProcessing) return;
-
+  
     this.setProcessing(true);
     this.appendMessage('user', text);
     this.inputEl.value = '';
     this.inputEl.focus();
-
+  
     const requestId = ++this.requestId;
     const request = {
       jsonrpc: '2.0',
@@ -133,7 +148,7 @@ class ChatApp {
       }
     };
     this.ws.send(JSON.stringify(request));
-
+  
     // Lưu ID để gắn tin nhắn streaming
     this.pendingMessageId = `msg-${Date.now()}`;
   }
@@ -144,25 +159,25 @@ class ChatApp {
     if (messageId) {
       messageDiv.dataset.messageId = messageId;
     }
-
+  
     const bubble = document.createElement('div');
     bubble.className = `bubble ${role}`;
-    bubble.innerHTML = `<div class="content">${this.escapeHtml(text)}</div>`;
-
+    bubble.innerHTML = `<div class=\"content\">${this.escapeHtml(text)}</div>`;
+  
     if (isStreaming) {
       bubble.dataset.streaming = 'true';
     }
-
+  
     messageDiv.appendChild(bubble);
-
+  
     if (isStreaming && this.pendingMessageId) {
       // Tìm tin nhắn cũ hoặc tạo mới
-      let existing = this.messagesEl.querySelector(`[data-message-id="${this.pendingMessageId}"]`);
+      let existing = this.messagesEl.querySelector(`[data-message-id=\"${this.pendingMessageId}\"]`);
       if (existing) {
         // Cập nhật tin nhắn hiện có
         let existingBubble = existing.querySelector('.bubble');
         if (existingBubble) {
-          existingBubble.innerHTML = `<div class="content">${this.escapeHtml(existingBubble.querySelector('.content')?.textContent || '' + text)}</div>`;
+          existingBubble.innerHTML = `<div class=\"content\">${this.escapeHtml(existingBubble.querySelector('.content')?.textContent || '' + text)}</div>`;
         }
       } else {
         // Thêm tin nhắn mới cho streaming
@@ -172,7 +187,7 @@ class ChatApp {
     } else {
       this.messagesEl.appendChild(messageDiv);
     }
-
+  
     // Scroll cuối cùng
     this.messagesEl.parentElement.scrollTop = this.messagesEl.parentElement.scrollHeight;
   }
@@ -205,7 +220,7 @@ class ChatApp {
         this.submitPrompt(text);
       }
     });
-
+  
     // Gửi tin nhắn khi nhấn Enter
     this.inputEl.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && !e.shiftKey) {
